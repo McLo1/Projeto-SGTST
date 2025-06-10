@@ -1,0 +1,1 @@
+renavan: s, modelo: s, marca: s, cor: s, placa: s, chassi: s, status: ativo, tipo: bau, peso: 12.23
