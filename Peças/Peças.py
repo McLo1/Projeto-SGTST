@@ -12,17 +12,16 @@ def carregar_pecas():
         with open(ARQUIVO, "r", encoding="utf-8") as f:  # Abre o arquivo em modo leitura
             for linha in f:
                 try:
-                    # Cada linha é dividida usando vírgula e espaço
-                    dados = linha.strip().split(", ")
-                    peca = {}  # Dicionário para armazenar os campos de uma peça
+                    dados = linha.strip().split(", ")  # Divide cada campo
+                    peca = {}
                     for campo in dados:
-                        chave, valor = campo.split(": ", 1)  # Separa campo e valor
-                        peca[chave.lower()] = valor  # Armazena no dicionário
+                        chave, valor = campo.split(": ", 1)
+                        peca[chave.lower()] = valor
                     peca["quantidade"] = int(peca["quantidade"])  # Converte quantidade para número
-                    pecas.append(peca)  # Adiciona a peça à lista
+                    pecas.append(peca)
                 except:
-                    continue  # Se der erro, pula a linha
-    return pecas  # Retorna a lista de peças
+                    continue  # Se der erro, ignora a linha
+    return pecas
 
 # =========================
 # Função para salvar as peças no arquivo
@@ -30,30 +29,34 @@ def carregar_pecas():
 def salvar_pecas(pecas):
     with open(ARQUIVO, "w", encoding="utf-8") as f:  # Abre o arquivo para escrita
         for p in pecas:
-            # Cria uma linha formatada com os campos
             linha = (
                 f"id: {p['id']}, descricao: {p['descricao']}, tipo: {p['tipo']}, "
                 f"quantidade: {p['quantidade']}, validade: {p['validade']}, observacoes: {p['observacoes']}"
             )
-            f.write(linha + "\n")  # Escreve a linha no arquivo
+            f.write(linha + "\n")
 
 # =========================
-# Função para inserir nova peça
+# Função para gerar o próximo ID automaticamente
+# =========================
+def gerar_proximo_id(pecas):
+    if not pecas:
+        return "1"  # Começa do 1 se não houver peças
+    ids = [int(p["id"]) for p in pecas if p["id"].isdigit()]
+    return str(max(ids) + 1)  # Pega o maior ID e soma 1
+
+# =========================
+# Inserir nova peça (com ID automático)
 # =========================
 def inserir(pecas):
     print("\n-- Inserir nova peça --")
-    id = input("ID: ")
     
-    # Verifica se o ID já existe
-    if any(p['id'] == id for p in pecas):
-        print("Já existe uma peça com esse ID.")
-        return
+    id = gerar_proximo_id(pecas)  # Gera o ID automaticamente
 
     descricao = input("Descrição: ")
     tipo = input("Tipo: ")
 
     try:
-        quantidade = int(input("Quantidade: "))  # Converte para número inteiro
+        quantidade = int(input("Quantidade: "))
     except ValueError:
         print("Quantidade inválida.")
         return
@@ -61,7 +64,6 @@ def inserir(pecas):
     validade = input("Validade (AAAA-MM-DD): ")
     observacoes = input("Observações: ")
 
-    # Cria o dicionário da nova peça
     nova_peca = {
         'id': id,
         'descricao': descricao,
@@ -71,11 +73,11 @@ def inserir(pecas):
         'observacoes': observacoes
     }
 
-    pecas.append(nova_peca)  # Adiciona na lista
-    print("Peça inserida com sucesso!")
+    pecas.append(nova_peca)
+    print(f"Peça inserida com sucesso! ID atribuído: {id}")
 
 # =========================
-# Função para pesquisar uma peça pelo ID
+# Pesquisar uma peça
 # =========================
 def pesquisar(pecas):
     print("\n-- Pesquisar peça --")
@@ -89,7 +91,7 @@ def pesquisar(pecas):
     print("Peça não encontrada.")
 
 # =========================
-# Função para alterar uma peça
+# Alterar uma peça
 # =========================
 def alterar(pecas):
     print("\n-- Alterar peça --")
@@ -111,7 +113,6 @@ def alterar(pecas):
             validade = input(f"Nova validade ({peca['validade']}): ") or peca['validade']
             observacoes = input(f"Novas observações ({peca['observacoes']}): ") or peca['observacoes']
 
-            # Atualiza os valores
             peca.update({
                 'descricao': descricao,
                 'tipo': tipo,
@@ -124,7 +125,7 @@ def alterar(pecas):
     print("Peça não encontrada.")
 
 # =========================
-# Função para excluir uma peça
+# Excluir uma peça
 # =========================
 def excluir(pecas):
     print("\n-- Excluir peça --")
@@ -133,7 +134,7 @@ def excluir(pecas):
         if peca['id'] == id:
             confirmar = input("Tem certeza que deseja excluir? (s/n): ").lower()
             if confirmar == 's':
-                del pecas[i]  # Remove a peça da lista
+                del pecas[i]
                 print("Peça excluída com sucesso!")
             else:
                 print("Exclusão cancelada.")
@@ -141,7 +142,7 @@ def excluir(pecas):
     print("Peça não encontrada.")
 
 # =========================
-# Função para listar todas as peças
+# Listar todas as peças
 # =========================
 def listar(pecas):
     print("\n-- Lista de Peças --")
@@ -150,18 +151,16 @@ def listar(pecas):
         return
 
     for peca in pecas:
-        # Imprime os dados da peça de forma legível
         print(", ".join([f"{k}: {v}" for k, v in peca.items()]))
         print("-" * 30)
 
 # =========================
-# Função principal (menu)
+# Menu principal
 # =========================
 def menu():
-    pecas = carregar_pecas()  # Carrega as peças do arquivo no início
+    pecas = carregar_pecas()
 
     while True:
-        # Exibe o menu principal
         print("\n=== Menu CRUD de Peças ===")
         print("1. Inserir peça")
         print("2. Pesquisar peça")
@@ -172,7 +171,6 @@ def menu():
 
         opcao = input("Escolha uma opção: ")
 
-        # Executa a função correspondente
         if opcao == '1':
             inserir(pecas)
             salvar_pecas(pecas)
@@ -193,7 +191,7 @@ def menu():
             print("Opção inválida. Tente novamente.")
 
 # =========================
-# Inicia o programa
+# Início do programa
 # =========================
 if __name__ == "__main__":
     menu()
