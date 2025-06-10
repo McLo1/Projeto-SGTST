@@ -1,1 +1,0 @@
-id: 1, descricao: 1, tipo: 1, quantidade: 1, validade: 1, observacoes: 1
