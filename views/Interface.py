@@ -6,6 +6,7 @@ from tela_caminhoes import abrir_tela_caminhoes
 from tela_fornecedores import abrir_tela_fornecedores
 from tela_funcionarios import abrir_tela_funcionarios
 from tela_clientes import abrir_tela_clientes
+from tela_registro_saida import abrir_tela_saida_caminhao
 
 # Criação da janela principal
 janela = tk.Tk()
@@ -21,5 +22,6 @@ ttk.Button(janela, text="Caminhões", width=25, command=abrir_tela_caminhoes).pa
 ttk.Button(janela, text="Fornecedores", width=25, command=abrir_tela_fornecedores).pack(pady=5)
 ttk.Button(janela, text="Funcionários", width=25, command=abrir_tela_funcionarios).pack(pady=5)
 ttk.Button(janela, text="Clientes", width=25, command=abrir_tela_clientes).pack(pady=5)
+ttk.Button(janela, text="Registro Saida", width=25, command=abrir_tela_saida_caminhao).pack(pady=5)
 
 janela.mainloop()
