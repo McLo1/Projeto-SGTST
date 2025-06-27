@@ -7,7 +7,7 @@ Semestre: 2025.1
 
 import tkinter as tk
 from tkinter import scrolledtext
-import serial
+from serial import Serial as serial
 import threading
 
 def ler_dados(serial_port, texto_area):
