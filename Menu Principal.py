@@ -13,6 +13,7 @@ from Clientes.tela_clientes import abrir_tela_clientes
 from Funcionarios.tela_funcionarios import abrir_tela_funcionarios
 from Fornecedores.tela_fornecedores import abrir_tela_fornecedores
 from Registro_Saida.tela_registro_saida import abrir_tela_saida_caminhao
+from Arduino.tela_arduino import abrir_tela_arduino
 
 # Cores e estilo
 COR_FUNDO = "#f0f4f8"
