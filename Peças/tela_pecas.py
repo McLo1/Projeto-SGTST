@@ -76,7 +76,7 @@ def excluir(entrys):
 def abrir_tela_pecas():
     janela = tk.Tk()
     janela.title("Cadastro de Peças")
-    janela.geometry("700x500")
+    janela.geometry("900x700")
     janela.configure(bg=COR_FUNDO)
 
     style = ttk.Style(janela)
@@ -107,9 +107,9 @@ def abrir_tela_pecas():
         ttk.Button(frame_botoes, text=texto, style="Custom.TButton", width=25, command=comando).pack(pady=5)
 
     botao("Adicionar", lambda: adicionar(entrys))
+    botao("Buscar por ID", lambda: buscar(entrys))
     botao("Alterar", lambda: alterar(entrys))
     botao("Excluir", lambda: excluir(entrys))
-    botao("Buscar por ID", lambda: buscar(entrys))
 
     janela.mainloop()
 

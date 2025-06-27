@@ -22,7 +22,7 @@ COR_TEXTO = "#ffffff"
 
 # Criação da janela principal
 janela = tk.Tk()
-janela.title("Sistema de Cadastro")
+janela.title("MTV")
 janela.geometry("350x500")
 janela.configure(bg=COR_FUNDO)
 

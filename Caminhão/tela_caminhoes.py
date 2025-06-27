@@ -78,7 +78,7 @@ def excluir(entrys):
 def abrir_tela():
     janela = tk.Tk()
     janela.title("Cadastro de Caminhões")
-    janela.geometry("700x600")
+    janela.geometry("900x700")
     janela.configure(bg=COR_FUNDO)
 
     # Estilo dos botões

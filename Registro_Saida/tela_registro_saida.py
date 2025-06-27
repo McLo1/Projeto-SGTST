@@ -80,7 +80,7 @@ def buscar_saida_por_id(entry_id):
 def abrir_tela_saida_caminhao():
     janela = tk.Tk()
     janela.title("Registro de Saída de Caminhão")
-    janela.geometry("750x550")
+    janela.geometry("900x700")
     janela.configure(bg=COR_FUNDO)
 
     style = ttk.Style(janela)

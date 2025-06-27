@@ -71,7 +71,7 @@ def excluir_funcionario(entry_id):
 def abrir_tela_funcionarios():
     janela = tk.Tk()
     janela.title("Cadastro de Funcionários")
-    janela.geometry("800x550")
+    janela.geometry("900x700")
     janela.configure(bg=COR_FUNDO)
 
     style = ttk.Style(janela)
@@ -102,9 +102,9 @@ def abrir_tela_funcionarios():
         ttk.Button(frame_botoes, text=texto, style="Custom.TButton", width=25, command=comando).pack(pady=5)
 
     botao("Adicionar", lambda: adicionar_funcionario(entrys))
+    botao("Buscar por ID", lambda: buscar_funcionario_por_id(entrys[0]))
     botao("Alterar", lambda: alterar_funcionario(entrys))
     botao("Excluir", lambda: excluir_funcionario(entrys[0]))
-    botao("Buscar por ID", lambda: buscar_funcionario_por_id(entrys[0]))
 
     janela.mainloop()
 

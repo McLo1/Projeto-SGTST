@@ -76,7 +76,7 @@ def excluir_cliente(entry_id):
 def abrir_tela_clientes():
     janela = tk.Tk()
     janela.title("Cadastro de Clientes")
-    janela.geometry("800x600")
+    janela.geometry("900x700")
     janela.configure(bg=COR_FUNDO)
 
     style = ttk.Style(janela)
@@ -107,9 +107,9 @@ def abrir_tela_clientes():
         ttk.Button(frame_botoes, text=texto, style="Custom.TButton", width=25, command=comando).pack(pady=5)
 
     botao("Adicionar", lambda: adicionar_cliente(entrys))
+    botao("Buscar por ID", lambda: buscar_cliente_por_id(entrys[0]))
     botao("Alterar", lambda: alterar_cliente(entrys))
     botao("Excluir", lambda: excluir_cliente(entrys[0]))
-    botao("Buscar por ID", lambda: buscar_cliente_por_id(entrys[0]))
 
     janela.mainloop()
 
