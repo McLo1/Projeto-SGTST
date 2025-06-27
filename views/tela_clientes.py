@@ -13,15 +13,39 @@ def adicionar_cliente(entrys):
     for e in entrys:
         e.delete(0, tk.END)
 
-def listar_clientes(caixa_texto):
-    caixa_texto.delete("1.0", tk.END)
+def mostrar_resultado_cliente(cliente):
+    janela_resultado = tk.Toplevel()
+    janela_resultado.title("Resultado da Busca - Cliente")
+    janela_resultado.geometry("600x250")
+
+    texto = f"""
+ID: {cliente[0]}
+Tipo: {cliente[1]}
+Nome: {cliente[2]}
+CPF: {cliente[3]}
+CNPJ: {cliente[4]}
+Observações: {cliente[5]}
+Endereço: {cliente[6]}
+Contato: {cliente[7]}
+    """
+    tk.Label(janela_resultado, text=texto.strip(), justify="left", font=("Arial", 11)).pack(padx=20, pady=20)
+
+def buscar_cliente_por_id(entry_id):
+    id_busca = entry_id.get().strip()
+    if not id_busca:
+        messagebox.showwarning("Aviso", "Informe o ID do cliente para buscar.")
+        return
+
     try:
         with open("clientes.txt", "r", encoding="utf-8") as arquivo:
             for linha in arquivo:
                 item = linha.strip().split(",")
-                caixa_texto.insert(tk.END, f"ID: {item[0]} | Tipo: {item[1]} | Nome: {item[2]} | CPF: {item[3]} | CNPJ: {item[4]} | Obs: {item[5]} | Endereço: {item[6]} | Contato: {item[7]}\n")
+                if item[0] == id_busca:
+                    mostrar_resultado_cliente(item)
+                    return
+        messagebox.showinfo("Resultado", "Cliente não encontrado.")
     except FileNotFoundError:
-        messagebox.showinfo("Info", "Nenhum cliente cadastrado ainda.")
+        messagebox.showerror("Erro", "Arquivo de clientes não encontrado.")
 
 def alterar_cliente(entrys):
     id_alvo = entrys[0].get().strip()
@@ -77,7 +101,7 @@ def excluir_cliente(entry_id):
 def abrir_tela_clientes():
     janela = tk.Tk()
     janela.title("Cadastro de Clientes")
-    janela.geometry("850x650")
+    janela.geometry("850x500")
 
     labels = ["ID do cliente", "Tipo", "Nome", "CPF", "CNPJ", "Observações", "Endereço", "Contato"]
     entrys = []
@@ -88,13 +112,11 @@ def abrir_tela_clientes():
         entry.grid(row=i, column=1, padx=10, pady=5)
         entrys.append(entry)
 
-    caixa_texto = tk.Text(janela, width=110, height=15)
-    caixa_texto.grid(row=len(labels)+1, column=0, columnspan=3, padx=10, pady=10)
-
+    # Botões principais
     tk.Button(janela, text="Adicionar", command=lambda: adicionar_cliente(entrys)).grid(row=len(labels), column=0, pady=10)
     tk.Button(janela, text="Alterar", command=lambda: alterar_cliente(entrys)).grid(row=len(labels), column=1, pady=10)
     tk.Button(janela, text="Excluir", command=lambda: excluir_cliente(entrys[0])).grid(row=len(labels), column=2, pady=10)
-    tk.Button(janela, text="Listar Clientes", command=lambda: listar_clientes(caixa_texto)).grid(row=len(labels)+2, column=1, pady=10)
+    tk.Button(janela, text="Buscar por ID", command=lambda: buscar_cliente_por_id(entrys[0])).grid(row=len(labels)+1, column=1, pady=10)
 
     janela.mainloop()
 

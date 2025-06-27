@@ -13,15 +13,41 @@ def adicionar_caminhao(entrys):
     for e in entrys:
         e.delete(0, tk.END)
 
-def listar_caminhoes(caixa_texto):
-    caixa_texto.delete("1.0", tk.END)
+def mostrar_resultado_em_janela(caminhao):
+    janela_resultado = tk.Toplevel()
+    janela_resultado.title("Resultado da Busca")
+    janela_resultado.geometry("200x300")
+
+    texto = f"""
+ID: {caminhao[0]}
+Renavan: {caminhao[1]}
+Modelo: {caminhao[2]}
+Marca: {caminhao[3]}
+Cor: {caminhao[4]}
+Placa: {caminhao[5]}
+Chassi: {caminhao[6]}
+Status: {caminhao[7]}
+Tipo: {caminhao[8]}
+Peso: {caminhao[9]}
+    """
+    tk.Label(janela_resultado, text=texto.strip(), justify="left", font=("Arial", 11)).pack(padx=20, pady=20)
+
+def buscar_caminhao_por_id(entry_id):
+    id_busca = entry_id.get().strip()
+    if not id_busca:
+        messagebox.showwarning("Aviso", "Informe o ID do caminhão para buscar.")
+        return
+
     try:
         with open("caminhoes.txt", "r", encoding="utf-8") as arquivo:
             for linha in arquivo:
                 item = linha.strip().split(",")
-                caixa_texto.insert(tk.END, f"ID: {item[0]} | Renavan: {item[1]} | Modelo: {item[2]} | Marca: {item[3]} | Cor: {item[4]} | Placa: {item[5]} | Chassi: {item[6]} | Status: {item[7]} | Tipo: {item[8]} | Peso: {item[9]}\n")
+                if item[0] == id_busca:
+                    mostrar_resultado_em_janela(item)
+                    return
+        messagebox.showinfo("Resultado", "Caminhão não encontrado.")
     except FileNotFoundError:
-        messagebox.showinfo("Info", "Nenhum caminhão cadastrado ainda.")
+        messagebox.showerror("Erro", "Arquivo de caminhões não encontrado.")
 
 def alterar_caminhao(entrys):
     id_alvo = entrys[0].get().strip()
@@ -77,7 +103,7 @@ def excluir_caminhao(entry_id):
 def abrir_tela_caminhoes():
     janela = tk.Tk()
     janela.title("Cadastro de Caminhões")
-    janela.geometry("750x680")  # Aumentei um pouco a altura
+    janela.geometry("750x600")
 
     labels = ["ID do caminhão", "Renavan", "Modelo", "Marca", "Cor", "Placa", "Chassi", "Status", "Tipo", "Peso"]
     entrys = []
@@ -88,14 +114,12 @@ def abrir_tela_caminhoes():
         entry.grid(row=i, column=1, padx=10, pady=5)
         entrys.append(entry)
 
-    # Botões logo após os campos
+    # Botões principais
     tk.Button(janela, text="Adicionar", command=lambda: adicionar_caminhao(entrys)).grid(row=11, column=0, pady=10)
     tk.Button(janela, text="Alterar", command=lambda: alterar_caminhao(entrys)).grid(row=11, column=1, pady=10)
     tk.Button(janela, text="Excluir", command=lambda: excluir_caminhao(entrys[0])).grid(row=11, column=2, pady=10)
-    tk.Button(janela, text="Listar Caminhões", command=lambda: listar_caminhoes(caixa_texto)).grid(row=12, column=1, pady=10)
 
-    # TextBox de listagem bem abaixo
-    caixa_texto = tk.Text(janela, width=95, height=15)
-    caixa_texto.grid(row=13, column=0, columnspan=3, padx=10, pady=10)
+    # Botão de busca por ID (substituindo a listagem)
+    tk.Button(janela, text="Buscar por ID", command=lambda: buscar_caminhao_por_id(entrys[0])).grid(row=12, column=1, pady=10)
 
     janela.mainloop()

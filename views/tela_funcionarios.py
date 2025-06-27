@@ -13,15 +13,38 @@ def adicionar_funcionario(entrys):
     for e in entrys:
         e.delete(0, tk.END)
 
-def listar_funcionarios(caixa_texto):
-    caixa_texto.delete("1.0", tk.END)
+def mostrar_resultado_funcionario(funcionario):
+    janela_resultado = tk.Toplevel()
+    janela_resultado.title("Resultado da Busca - Funcionário")
+    janela_resultado.geometry("500x250")
+
+    texto = f"""
+ID: {funcionario[0]}
+Nome: {funcionario[1]}
+CPF: {funcionario[2]}
+Cargo: {funcionario[3]}
+Nascimento: {funcionario[4]}
+Endereço: {funcionario[5]}
+Contato: {funcionario[6]}
+    """
+    tk.Label(janela_resultado, text=texto.strip(), justify="left", font=("Arial", 11)).pack(padx=20, pady=20)
+
+def buscar_funcionario_por_id(entry_id):
+    id_busca = entry_id.get().strip()
+    if not id_busca:
+        messagebox.showwarning("Aviso", "Informe o ID do funcionário para buscar.")
+        return
+
     try:
         with open("funcionarios.txt", "r", encoding="utf-8") as arquivo:
             for linha in arquivo:
                 item = linha.strip().split(",")
-                caixa_texto.insert(tk.END, f"ID: {item[0]} | Nome: {item[1]} | CPF: {item[2]} | Cargo: {item[3]} | Nascimento: {item[4]} | Endereço: {item[5]} | Contato: {item[6]}\n")
+                if item[0] == id_busca:
+                    mostrar_resultado_funcionario(item)
+                    return
+        messagebox.showinfo("Resultado", "Funcionário não encontrado.")
     except FileNotFoundError:
-        messagebox.showinfo("Info", "Nenhum funcionário cadastrado ainda.")
+        messagebox.showerror("Erro", "Arquivo de funcionários não encontrado.")
 
 def alterar_funcionario(entrys):
     id_alvo = entrys[0].get().strip()
@@ -77,7 +100,7 @@ def excluir_funcionario(entry_id):
 def abrir_tela_funcionarios():
     janela = tk.Tk()
     janela.title("Cadastro de Funcionários")
-    janela.geometry("800x600")
+    janela.geometry("800x500")
 
     labels = ["ID do funcionário", "Nome", "CPF", "Cargo", "Data de nascimento", "Endereço", "Contato"]
     entrys = []
@@ -88,13 +111,10 @@ def abrir_tela_funcionarios():
         entry.grid(row=i, column=1, padx=10, pady=5)
         entrys.append(entry)
 
-    caixa_texto = tk.Text(janela, width=95, height=15)
-    caixa_texto.grid(row=len(labels)+1, column=0, columnspan=3, padx=10, pady=10)
-
     tk.Button(janela, text="Adicionar", command=lambda: adicionar_funcionario(entrys)).grid(row=len(labels), column=0, pady=10)
     tk.Button(janela, text="Alterar", command=lambda: alterar_funcionario(entrys)).grid(row=len(labels), column=1, pady=10)
     tk.Button(janela, text="Excluir", command=lambda: excluir_funcionario(entrys[0])).grid(row=len(labels), column=2, pady=10)
-    tk.Button(janela, text="Listar Funcionários", command=lambda: listar_funcionarios(caixa_texto)).grid(row=len(labels)+2, column=1, pady=10)
+    tk.Button(janela, text="Buscar por ID", command=lambda: buscar_funcionario_por_id(entrys[0])).grid(row=len(labels)+1, column=1, pady=10)
 
     janela.mainloop()
 

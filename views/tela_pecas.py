@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
 
-# === Funções do CRUD originais adaptadas para GUI ===
 def adicionar_pecas(entrys):
     dados = [e.get().strip() for e in entrys]
     if any(not campo for campo in dados):
@@ -9,20 +8,42 @@ def adicionar_pecas(entrys):
         return
 
     with open("peças.txt", "a", encoding="utf-8") as arquivo:
-        arquivo.write(f"{dados[0]}, {dados[1]}, {dados[2]}, {dados[3]}, {dados[4]}, {dados[5]}\n")
+        arquivo.write(", ".join(dados) + "\n")
     messagebox.showinfo("Sucesso", "Peça adicionada com sucesso!")
     for e in entrys:
         e.delete(0, tk.END)
 
-def listar_pecas(caixa_texto):
-    caixa_texto.delete("1.0", tk.END)
+def mostrar_resultado_peca(peca):
+    janela_resultado = tk.Toplevel()
+    janela_resultado.title("Resultado da Busca - Peça")
+    janela_resultado.geometry("500x250")
+
+    texto = f"""
+ID: {peca[0]}
+Descrição: {peca[1]}
+Tipo: {peca[2]}
+Quantidade: {peca[3]}
+Validade: {peca[4]}
+Observações: {peca[5]}
+    """
+    tk.Label(janela_resultado, text=texto.strip(), justify="left", font=("Arial", 11)).pack(padx=20, pady=20)
+
+def buscar_peca_por_id(entry_id):
+    id_busca = entry_id.get().strip()
+    if not id_busca:
+        messagebox.showwarning("Aviso", "Informe o ID da peça para buscar.")
+        return
+
     try:
         with open("peças.txt", "r", encoding="utf-8") as arquivo:
             for linha in arquivo:
                 item = linha.strip().split(",")
-                caixa_texto.insert(tk.END, f"ID: {item[0]} | Descrição: {item[1]} | Tipo: {item[2]} | Quantidade: {item[3]} | Validade: {item[4]} | Obs: {item[5]}\n")
+                if item[0] == id_busca:
+                    mostrar_resultado_peca(item)
+                    return
+        messagebox.showinfo("Resultado", "Peça não encontrada.")
     except FileNotFoundError:
-        messagebox.showinfo("Info", "Nenhuma peça cadastrada ainda.")
+        messagebox.showerror("Erro", "Arquivo de peças não encontrado.")
 
 def alterar_pecas(entrys):
     id_alvo = entrys[0].get().strip()
@@ -79,7 +100,7 @@ def excluir_pecas(entry_id):
 def abrir_tela_pecas():
     janela = tk.Toplevel()
     janela.title("Cadastro de Peças")
-    janela.geometry("600x550")
+    janela.geometry("600x450")
 
     labels = ["ID do produto", "Descrição", "Tipo", "Quantidade", "Validade", "Observações"]
     entrys = []
@@ -94,10 +115,6 @@ def abrir_tela_pecas():
     tk.Button(janela, text="Adicionar", command=lambda: adicionar_pecas(entrys)).grid(row=6, column=0, pady=10)
     tk.Button(janela, text="Alterar", command=lambda: alterar_pecas(entrys)).grid(row=6, column=1, pady=10)
     tk.Button(janela, text="Excluir", command=lambda: excluir_pecas(entrys[0])).grid(row=6, column=2, pady=10)
-
-    caixa_texto = tk.Text(janela, width=70, height=15)
-    caixa_texto.grid(row=7, column=0, columnspan=3, padx=10, pady=10)
-
-    tk.Button(janela, text="Listar Peças", command=lambda: listar_pecas(caixa_texto)).grid(row=8, column=1, pady=10)
+    tk.Button(janela, text="Buscar por ID", command=lambda: buscar_peca_por_id(entrys[0])).grid(row=7, column=1, pady=10)
 
     janela.mainloop()

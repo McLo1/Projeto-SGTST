@@ -13,15 +13,39 @@ def adicionar_fornecedor(entrys):
     for e in entrys:
         e.delete(0, tk.END)
 
-def listar_fornecedores(caixa_texto):
-    caixa_texto.delete("1.0", tk.END)
+def mostrar_resultado_fornecedor(fornecedor):
+    janela_resultado = tk.Toplevel()
+    janela_resultado.title("Resultado da Busca - Fornecedor")
+    janela_resultado.geometry("600x300")
+
+    texto = f"""
+ID: {fornecedor[0]}
+CNPJ: {fornecedor[1]}
+Razão Social: {fornecedor[2]}
+Nome Fantasia: {fornecedor[3]}
+Área de Atuação: {fornecedor[4]}
+Endereço: {fornecedor[5]}
+Contato: {fornecedor[6]}
+Produtos: {fornecedor[7]}
+    """
+    tk.Label(janela_resultado, text=texto.strip(), justify="left", font=("Arial", 11)).pack(padx=20, pady=20)
+
+def buscar_fornecedor_por_id(entry_id):
+    id_busca = entry_id.get().strip()
+    if not id_busca:
+        messagebox.showwarning("Aviso", "Informe o ID do fornecedor para buscar.")
+        return
+
     try:
         with open("fornecedores.txt", "r", encoding="utf-8") as arquivo:
             for linha in arquivo:
                 item = linha.strip().split(",")
-                caixa_texto.insert(tk.END, f"ID: {item[0]} | CNPJ: {item[1]} | Razão Social: {item[2]} | Nome Fantasia: {item[3]} | Área de Atuação: {item[4]} | Endereço: {item[5]} | Contato: {item[6]} | Produtos: {item[7]}\n")
+                if item[0] == id_busca:
+                    mostrar_resultado_fornecedor(item)
+                    return
+        messagebox.showinfo("Resultado", "Fornecedor não encontrado.")
     except FileNotFoundError:
-        messagebox.showinfo("Info", "Nenhum fornecedor cadastrado ainda.")
+        messagebox.showerror("Erro", "Arquivo de fornecedores não encontrado.")
 
 def alterar_fornecedor(entrys):
     id_alvo = entrys[0].get().strip()
@@ -77,7 +101,7 @@ def excluir_fornecedor(entry_id):
 def abrir_tela_fornecedores():
     janela = tk.Tk()
     janela.title("Cadastro de Fornecedores")
-    janela.geometry("800x600")
+    janela.geometry("850x500")
 
     labels = ["ID do fornecedor", "CNPJ", "Razão Social", "Nome Fantasia", "Área de Atuação", "Endereço", "Contato", "Produtos"]
     entrys = []
@@ -88,13 +112,10 @@ def abrir_tela_fornecedores():
         entry.grid(row=i, column=1, padx=10, pady=5)
         entrys.append(entry)
 
-    caixa_texto = tk.Text(janela, width=95, height=15)
-    caixa_texto.grid(row=len(labels)+1, column=0, columnspan=3, padx=10, pady=10)
-
     tk.Button(janela, text="Adicionar", command=lambda: adicionar_fornecedor(entrys)).grid(row=len(labels), column=0, pady=10)
     tk.Button(janela, text="Alterar", command=lambda: alterar_fornecedor(entrys)).grid(row=len(labels), column=1, pady=10)
     tk.Button(janela, text="Excluir", command=lambda: excluir_fornecedor(entrys[0])).grid(row=len(labels), column=2, pady=10)
-    tk.Button(janela, text="Listar Fornecedores", command=lambda: listar_fornecedores(caixa_texto)).grid(row=len(labels)+2, column=1, pady=10)
+    tk.Button(janela, text="Buscar por ID", command=lambda: buscar_fornecedor_por_id(entrys[0])).grid(row=len(labels)+1, column=1, pady=10)
 
     janela.mainloop()
 
