@@ -1,3 +1,10 @@
+"""
+Nome do arquivo: caminhao.py
+Equipe: Marcelo, Layza, Vanderson, Caique.
+Turma: G91166
+Semestre: 2025.1
+"""
+
 def adicionar_caminhao(dados):
     with open("caminhoes.txt", "a", encoding="utf-8") as arquivo:
         arquivo.write(", ".join(dados) + "\n")

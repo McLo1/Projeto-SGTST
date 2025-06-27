@@ -1,3 +1,10 @@
+"""
+Nome do arquivo: tela_fornecedores.py
+Equipe: Marcelo, Layza, Vanderson, Caique.
+Turma: G91166
+Semestre: 2025.1
+"""
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 from Fornecedores import fornecedores as crud

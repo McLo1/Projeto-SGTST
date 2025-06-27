@@ -1,3 +1,10 @@
+"""
+Nome do arquivo: funcionarios.py
+Equipe: Marcelo, Layza, Vanderson, Caique.
+Turma: G91166
+Semestre: 2025.1
+"""
+
 def adicionar_funcionario(dados):
     with open("funcionarios.txt", "a", encoding="utf-8") as arquivo:
         arquivo.write(", ".join(dados) + "\n")

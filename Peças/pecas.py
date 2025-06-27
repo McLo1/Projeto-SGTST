@@ -1,3 +1,10 @@
+"""
+Nome do arquivo: pecas.py
+Equipe: Marcelo, Layza, Vanderson, Caique.
+Turma: G91166
+Semestre: 2025.1
+"""
+
 def adicionar_peca(dados):
     with open("peças.txt", "a", encoding="utf-8") as arquivo:
         arquivo.write(", ".join(dados) + "\n")

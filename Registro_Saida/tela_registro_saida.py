@@ -1,3 +1,10 @@
+"""
+Nome do arquivo: tela_registro_saida.py
+Equipe: Marcelo, Layza, Vanderson, Caique.
+Turma: G91166
+Semestre: 2025.1
+"""
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 from Registro_Saida import Registro_saida as saida_caminhao

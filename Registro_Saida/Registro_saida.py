@@ -1,3 +1,10 @@
+"""
+Nome do arquivo: Registro_saida.py
+Equipe: Marcelo, Layza, Vanderson, Caique.
+Turma: G91166
+Semestre: 2025.1
+"""
+
 def adicionar_saida(dados):
     with open("registros_saida.txt", "a", encoding="utf-8") as arquivo:
         arquivo.write(", ".join(dados) + "\n")
